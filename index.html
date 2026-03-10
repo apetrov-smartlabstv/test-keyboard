@@ -27,7 +27,7 @@
             margin-right: 1rem;
         }
 
-         .input.active {
+        .input.active {
             border-color: blue;
         }
 
@@ -53,6 +53,8 @@
         const passwordInput = document.querySelector('.input.password');
         const inputs = document.querySelectorAll('.input');
 
+        let isShown = false;
+
         let loginData = '';
         let passwordData = '';
 
@@ -60,7 +62,7 @@
         let isPasword = false;
 
         window.onScreenKeyboard.oninput = (event) => {
-            //console.log(">>keyboard, data: " + event.data);
+            console.log(">>keyboard.opinput, event.data: " + event.data + ", window.onScreenKeyboard.data: " + window.onScreenKeyboard.data);
             if (isLogin) {
                 loginData = event.data;
                 loginInput.innerHTML = loginData;
@@ -70,6 +72,16 @@
             }
         };
 
+        window.onScreenKeyboard.onshow = () => {
+            isShown = true;
+            console.log('>>window.onScreenKeyboard.onshow, isShown');
+        };
+      
+        window.onScreenKeyboard.onhide = () => {
+            isShown = false;
+            console.log('>>window.onScreenKeyboard.onshow, isHidden');
+        };
+
         loginInput.addEventListener('mousedown', (event) => {
             onLoginInputClicked(event);
         });
@@ -77,26 +89,49 @@
             onPasswordInputClicked(event);
         });
 
+        function setActiveInput(el) {
+            inputs.forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+
         function setKeyboardData(data) {
             window.onScreenKeyboard.data = data;
             window.onScreenKeyboard.hide();
             window.onScreenKeyboard.show(); 
         }
 
+        function showIfHidden() {
+            if (isShown) return;
+            window.onScreenKeyboard.show(); 
+            console.log('>>showIfHidden, keyboard shown');
+        }
+
+        function showKeyboard() {
+            window.onScreenKeyboard.show(); 
+        }
+
         function onLoginInputClicked(event) {
-            console.log('>>Mouse down on Login');
+            console.log('>>onLoginInputClicked, data: ' + window.onScreenKeyboard.data);
+            //setActiveInput(event.currentTarget);
+            showIfHidden();
+            //showKeyboard();
 
             isLogin = true;
             isPasword = false;
-            setKeyboardData(loginData);
+            //setKeyboardData(loginData);
+            window.onScreenKeyboard.data = loginData;
         }
 
         function onPasswordInputClicked(event) {
-            console.log('>>Mouse down on Password');
+            console.log('>>onPasswordInputClicked, data: ' + window.onScreenKeyboard.data);
+            //setActiveInput(event.currentTarget);
+            showIfHidden();
+            //showKeyboard();
 
             isLogin = false;
             isPasword = true;
-            setKeyboardData(passwordData);
+            //setKeyboardData(passwordData);
+            window.onScreenKeyboard.data = passwordData;
         }
 
     </script>
