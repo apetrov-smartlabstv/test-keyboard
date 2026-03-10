@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+
+    <style type="text/css">
+        body {
+            background-color: white;
+            font-size: 2rem;
+        }
+
+        .container {
+            margin-top: 10rem;
+            border: 2px solid red;
+            height: 60rem;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+        .input {
+            margin-top: 10rem;
+            border: 5px solid green;
+            height: 10rem;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+         .input.active {
+            border-color: blue;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <div class="container">
+        <div class="input login">
+            Login
+        </div>
+        <div class="input password">
+            Password
+        </div>
+    </div>
+
+    <script>
+
+        console.log('>>Hello World');
+
+
+        const loginInput = document.querySelector('.input.login');
+        const passwordInput = document.querySelector('.input.password');
+        const inputs = document.querySelectorAll('.input');
+
+        let loginData = '';
+        let passwordData = '';
+
+        let isLogin = false;
+        let isPasword = false;
+
+        window.onScreenKeyboard.oninput = (event) => {
+            //console.log(">>keyboard, data: " + event.data);
+            if (isLogin) {
+                loginData = event.data;
+                loginInput.innerHTML = loginData;
+            } else if (isPasword) {
+                passwordData = event.data;
+                passwordInput.innerHTML = passwordData;
+            }
+        };
+
+        loginInput.addEventListener('mousedown', (event) => {
+            onLoginInputClicked(event);
+        });
+        passwordInput.addEventListener('mousedown', (event) => {
+            onPasswordInputClicked(event);
+        });
+
+        function setKeyboardData(data) {
+            window.onScreenKeyboard.data = data;
+            window.onScreenKeyboard.hide();
+            window.onScreenKeyboard.show(); 
+        }
+
+        function onLoginInputClicked(event) {
+            console.log('>>Mouse down on Login');
+
+            isLogin = true;
+            isPasword = false;
+            setKeyboardData(loginData);
+        }
+
+        function onPasswordInputClicked(event) {
+            console.log('>>Mouse down on Password');
+
+            isLogin = false;
+            isPasword = true;
+            setKeyboardData(passwordData);
+        }
+
+    </script>
+
+</body>
+</html>
